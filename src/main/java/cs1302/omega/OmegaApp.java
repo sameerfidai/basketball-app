@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -24,6 +25,9 @@ public class OmegaApp extends Application {
 
     VBox root;
     Scene scene;
+
+    // hbox for search button and search field
+    HBox searchBox;
 
     /** {@inheritDoc} */
     @Override
@@ -53,10 +57,12 @@ public class OmegaApp extends Application {
         MenuBar menuBar = new MenuBar();
         menuBar.setMinWidth(600);
         Menu file = new Menu("File");
-        Menu about = new Menu("About");
-        menuBar.getMenus().addAll(file, about);
+        Menu help = new Menu("Help");
+        menuBar.getMenus().addAll(file, help);
         MenuItem exit = new MenuItem("Exit");
         file.getItems().add(exit);
+        MenuItem about = new MenuItem("About");
+        help.getItems().add(about);
         exit.setOnAction(event -> Platform.exit());
         hbox.getChildren().add(menuBar);
         HBox.setHgrow(menuBar, Priority.ALWAYS);
@@ -64,12 +70,21 @@ public class OmegaApp extends Application {
     }
 
     /**
-     * Creates the search Button.
+     * Creates the search field.
+     */
+    public void searchField() {
+        searchBox = new HBox(10);
+        TextField field = new TextField();
+        HBox.setMargin(field, new Insets(5, 1, 5, 10));
+        searchBox.getChildren().add(field);
+    }
+
+    /**
+     * Creates the search button.
      */
     public void loadSearchButton() {
-        HBox searchBox = new HBox(10);
         Button search = new Button("Search");
-        HBox.setMargin(search, new Insets(5, 10, 5, 10));
+        HBox.setMargin(search, new Insets(5, 10, 5, 0));
         searchBox.getChildren().add(search);
         root.getChildren().add(searchBox);
     }
@@ -79,6 +94,7 @@ public class OmegaApp extends Application {
      */
     public void run() {
         loadToolbar();
+        searchField();
         loadSearchButton();
     }
 
