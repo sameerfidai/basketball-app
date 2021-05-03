@@ -3,6 +3,7 @@ package cs1302.omega;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -28,11 +29,11 @@ public class OmegaApp extends Application {
 
     VBox root;
     Scene scene;
-
-    // hbox for search button and search field
+    TextField field;
     HBox searchBox;
-
-    String playerName = "trae+young";
+    VBox stats;
+    VBox errorBox;
+    String playerName = null;
 
     /** {@inheritDoc} */
     @Override
@@ -78,8 +79,6 @@ public class OmegaApp extends Application {
         root.getChildren().add(hbox);
     }
 
-    TextField field;
-
     /**
      * Creates the search field.
      */
@@ -114,24 +113,39 @@ public class OmegaApp extends Application {
      * Gets stats for NBA Player.
      * 
      * @throws IOException
+     * @param content name of player
      */
     public void getStats(String content) throws IOException {
-        String sUrl = "https://www.balldontlie.io/api/v1/players?search=" + content;
-        URL url = new URL(sUrl);
-        InputStreamReader reader = new InputStreamReader(url.openStream());
-        JsonElement je = JsonParser.parseReader(reader);
-        JsonObject jRoot = je.getAsJsonObject();
-        JsonArray results = jRoot.getAsJsonArray("data");
-        JsonObject result = results.get(0).getAsJsonObject();
-        printStats(result);
+        if (stats != null) {
+            stats.getChildren().clear();
+        }
+        if (errorBox != null) {
+            errorBox.getChildren().clear();
+        }
+        try {
+            String sUrl = "https://www.balldontlie.io/api/v1/players?search=" + content;
+            URL url = new URL(sUrl);
+            InputStreamReader reader = new InputStreamReader(url.openStream());
+            JsonElement je = JsonParser.parseReader(reader);
+            JsonObject jRoot = je.getAsJsonObject();
+            JsonArray results = jRoot.getAsJsonArray("data");
+            JsonObject result = results.get(0).getAsJsonObject();
+            printStats(result);
+        } catch (Exception e) {
+            errorBox = new VBox();
+            Label errorMsg = new Label("ERROR: Please try again.");
+            errorBox.getChildren().add(errorMsg);
+            root.getChildren().add(errorBox);
+        }
     }
 
     /**
      * Prints stats for Player.
      * 
-     * @param result
+     * @param result JSON object
      */
     public void printStats(JsonObject result) {
+        stats = new VBox(10);
         JsonElement jFirstName = result.get("first_name");
         JsonElement jLastName = result.get("last_name");
         JsonElement jPosition = result.get("position");
@@ -140,13 +154,17 @@ public class OmegaApp extends Application {
         String firstName = jFirstName.getAsString();
         String lastName = jLastName.getAsString();
         String position = jPosition.getAsString();
+        if (position.equalsIgnoreCase("")) {
+            position = "N/A";
+        }
         String team = jeTeam.getAsString();
-        System.out.println("First Name: " + firstName);
-        System.out.println("Last Name: " + lastName);
-        System.out.println("Position: " + position);
-        System.out.println("Team: " + team);
-        System.out.println("_____________________________");
-
+        Label labelFirstName = new Label("First Name: " + firstName);
+        Label labelLastName = new Label("Last Name: " + lastName);
+        Label labelPosition = new Label("Position: " + position);
+        Label labelTeam = new Label("Team: " + team);
+        stats.getChildren().addAll(labelFirstName, labelLastName, labelPosition, labelTeam);
+        stats.setAlignment(Pos.CENTER);
+        root.getChildren().add(stats);
     }
 
     /**
