@@ -32,6 +32,8 @@ public class OmegaApp extends Application {
     // hbox for search button and search field
     HBox searchBox;
 
+    String playerName = "trae+young";
+
     /** {@inheritDoc} */
     @Override
     public void start(Stage stage) {
@@ -76,12 +78,14 @@ public class OmegaApp extends Application {
         root.getChildren().add(hbox);
     }
 
+    TextField field;
+
     /**
      * Creates the search field.
      */
     public void searchField() {
         searchBox = new HBox(10);
-        TextField field = new TextField();
+        field = new TextField();
         HBox.setMargin(field, new Insets(5, 1, 5, 10));
         searchBox.getChildren().add(field);
     }
@@ -94,6 +98,16 @@ public class OmegaApp extends Application {
         HBox.setMargin(search, new Insets(5, 10, 5, 0));
         searchBox.getChildren().add(search);
         root.getChildren().add(searchBox);
+        search.setOnAction(e -> {
+            try {
+                playerName = field.getText();
+                playerName.toLowerCase();
+                playerName = playerName.replaceAll("\\s", "+");
+                getStats(playerName);
+            } catch (IOException e1) {
+                System.err.println(e1);
+            }
+        });
     }
 
     /**
@@ -101,8 +115,8 @@ public class OmegaApp extends Application {
      * 
      * @throws IOException
      */
-    public void getStats() throws IOException {
-        String sUrl = "https://www.balldontlie.io/api/v1/players?search=trae+young";
+    public void getStats(String content) throws IOException {
+        String sUrl = "https://www.balldontlie.io/api/v1/players?search=" + content;
         URL url = new URL(sUrl);
         InputStreamReader reader = new InputStreamReader(url.openStream());
         JsonElement je = JsonParser.parseReader(reader);
@@ -131,6 +145,8 @@ public class OmegaApp extends Application {
         System.out.println("Last Name: " + lastName);
         System.out.println("Position: " + position);
         System.out.println("Team: " + team);
+        System.out.println("_____________________________");
+
     }
 
     /**
@@ -142,7 +158,6 @@ public class OmegaApp extends Application {
         loadToolbar();
         searchField();
         loadSearchButton();
-        getStats();
     }
 
 } // OmegaApp
