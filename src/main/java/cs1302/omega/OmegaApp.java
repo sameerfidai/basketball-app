@@ -11,12 +11,15 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import com.google.gson.*;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 
 /**
  * REPLACE WITH NON-SHOUTING DESCRIPTION OF YOUR APP.
@@ -37,7 +40,11 @@ public class OmegaApp extends Application {
         scene = new Scene(root);
 
         // run the app
-        run();
+        try {
+            run();
+        } catch (IOException e) {
+            System.err.println(e);
+        }
 
         // setup stage
         stage.setTitle("OmegaApp!");
@@ -90,12 +97,52 @@ public class OmegaApp extends Application {
     }
 
     /**
-     * Runs the App.
+     * Gets stats for NBA Player.
+     * 
+     * @throws IOException
      */
-    public void run() {
+    public void getStats() throws IOException {
+        String sUrl = "https://www.balldontlie.io/api/v1/players?search=trae+young";
+        URL url = new URL(sUrl);
+        InputStreamReader reader = new InputStreamReader(url.openStream());
+        JsonElement je = JsonParser.parseReader(reader);
+        JsonObject jRoot = je.getAsJsonObject();
+        JsonArray results = jRoot.getAsJsonArray("data");
+        JsonObject result = results.get(0).getAsJsonObject();
+        printStats(result);
+    }
+
+    /**
+     * Prints stats for Player.
+     * 
+     * @param result
+     */
+    public void printStats(JsonObject result) {
+        JsonElement jFirstName = result.get("first_name");
+        JsonElement jLastName = result.get("last_name");
+        JsonElement jPosition = result.get("position");
+        JsonObject jTeam = result.getAsJsonObject("team");
+        JsonElement jeTeam = jTeam.get("full_name");
+        String firstName = jFirstName.getAsString();
+        String lastName = jLastName.getAsString();
+        String position = jPosition.getAsString();
+        String team = jeTeam.getAsString();
+        System.out.println("First Name: " + firstName);
+        System.out.println("Last Name: " + lastName);
+        System.out.println("Position: " + position);
+        System.out.println("Team: " + team);
+    }
+
+    /**
+     * Runs the App.
+     * 
+     * @throws IOException
+     */
+    public void run() throws IOException {
         loadToolbar();
         searchField();
         loadSearchButton();
+        getStats();
     }
 
 } // OmegaApp
