@@ -23,7 +23,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 /**
- * REPLACE WITH NON-SHOUTING DESCRIPTION OF YOUR APP.
+ * The App displays few statistics about an NBA player along with an image.
  */
 public class OmegaApp extends Application {
 
@@ -31,6 +31,7 @@ public class OmegaApp extends Application {
     Scene scene;
     TextField field;
     HBox searchBox;
+    HBox displayImg;
     VBox stats;
     VBox errorBox;
     String playerName = null;
@@ -165,6 +166,50 @@ public class OmegaApp extends Application {
         stats.getChildren().addAll(labelFirstName, labelLastName, labelPosition, labelTeam);
         stats.setAlignment(Pos.CENTER);
         root.getChildren().add(stats);
+        try {
+            getImage(firstName, lastName);
+        } catch (Exception e) {
+            System.out.println("no pic found");
+        }
+    }
+
+    /**
+     * Gets the player's image.
+     * 
+     * @param firstName player's first name
+     * @param lastName  player's last name
+     * @throws IOException
+     */
+    public void getImage(String firstName, String lastName) throws IOException {
+        if (displayImg != null) {
+            displayImg.getChildren().clear();
+        }
+        try {
+            String sUrl = "https://www.thesportsdb.com/api/v1/json/1/searchplayers.php?p=" + firstName + "%20"
+                    + lastName;
+            URL url = new URL(sUrl);
+            InputStreamReader reader = new InputStreamReader(url.openStream());
+            JsonElement je = JsonParser.parseReader(reader);
+            JsonObject jRoot = je.getAsJsonObject();
+            JsonArray results = jRoot.getAsJsonArray("player");
+            JsonObject result = results.get(0).getAsJsonObject();
+            JsonElement jImage = result.get("strThumb");
+            String link = jImage.getAsString();
+            displayImg = new HBox();
+            Image img = new Image(link);
+            ImageView imgView = new ImageView(img);
+            imgView.setFitHeight(300);
+            imgView.setFitWidth(300);
+            HBox.setMargin(imgView, new Insets(30, 10, 10, 10));
+            displayImg.setAlignment(Pos.CENTER);
+            displayImg.getChildren().add(imgView);
+            root.getChildren().add(displayImg);
+        } catch (Exception e) {
+            errorBox = new VBox();
+            Label errorMsg = new Label("ERROR: Please try again.");
+            errorBox.getChildren().add(errorMsg);
+            root.getChildren().add(errorBox);
+        }
     }
 
     /**
