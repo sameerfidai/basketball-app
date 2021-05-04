@@ -16,11 +16,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import com.google.gson.*;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 
 /**
  * The App displays few statistics about an NBA player along with an image.
@@ -34,7 +32,7 @@ public class OmegaApp extends Application {
     HBox displayImg;
     VBox stats;
     VBox errorBox;
-    String playerName = null;
+    String playerName;
 
     /** {@inheritDoc} */
     @Override
@@ -104,8 +102,8 @@ public class OmegaApp extends Application {
                 playerName.toLowerCase();
                 playerName = playerName.replaceAll("\\s", "+");
                 getStats(playerName);
-            } catch (IOException e1) {
-                System.err.println(e1);
+            } catch (Exception e1) {
+                System.err.println(e);
             }
         });
     }
@@ -133,6 +131,9 @@ public class OmegaApp extends Application {
             JsonObject result = results.get(0).getAsJsonObject();
             printStats(result);
         } catch (Exception e) {
+            if (displayImg != null) {
+                displayImg.getChildren().clear();
+            }
             errorBox = new VBox();
             Label errorMsg = new Label("ERROR: Please try again.");
             errorBox.getChildren().add(errorMsg);
@@ -169,7 +170,7 @@ public class OmegaApp extends Application {
         try {
             getImage(firstName, lastName);
         } catch (Exception e) {
-            System.out.println("no pic found");
+            System.err.println(e);
         }
     }
 
@@ -206,7 +207,9 @@ public class OmegaApp extends Application {
             root.getChildren().add(displayImg);
         } catch (Exception e) {
             errorBox = new VBox();
-            Label errorMsg = new Label("ERROR: Please try again.");
+            Label errorMsg = new Label("NO picture available.");
+            VBox.setMargin(errorMsg, new Insets(30, 10, 10, 10));
+            errorBox.setAlignment(Pos.CENTER);
             errorBox.getChildren().add(errorMsg);
             root.getChildren().add(errorBox);
         }
