@@ -44,7 +44,7 @@ public class OmegaApp extends Application {
         // run the app
         try {
             run();
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.err.println(e);
         }
 
@@ -84,6 +84,7 @@ public class OmegaApp extends Application {
     public void searchField() {
         searchBox = new HBox(10);
         field = new TextField();
+        field.setPromptText("e.g: Kyrie Irving");
         HBox.setMargin(field, new Insets(5, 1, 5, 10));
         searchBox.getChildren().add(field);
     }
@@ -128,15 +129,13 @@ public class OmegaApp extends Application {
             JsonElement je = JsonParser.parseReader(reader);
             JsonObject jRoot = je.getAsJsonObject();
             JsonArray results = jRoot.getAsJsonArray("data");
-            if (results.size() > 1) {
-                getNextPlayer();
-            }
             JsonObject result = results.get(0).getAsJsonObject();
             printStats(result);
         } catch (Exception e) {
             if (displayImg != null) {
                 displayImg.getChildren().clear();
             }
+            System.err.println(e);
             errorBox = new VBox();
             Label errorMsg = new Label("ERROR: Please try again.");
             errorBox.getChildren().add(errorMsg);
@@ -154,16 +153,21 @@ public class OmegaApp extends Application {
         JsonElement jFirstName = result.get("first_name");
         JsonElement jLastName = result.get("last_name");
         JsonElement jPosition = result.get("position");
-        JsonElement jHeightFeet = result.get("height_feet");
-        JsonElement jHeightInches = result.get("height_inches");
+        String height = "";
+        try {
+            JsonElement jHeightFeet = result.get("height_feet");
+            JsonElement jHeightInches = result.get("height_inches");
+            String heightFeet = jHeightFeet.getAsString();
+            String heightInches = jHeightInches.getAsString();
+            height = heightFeet + " " + heightInches + "\"";
+        } catch (java.lang.UnsupportedOperationException e) {
+            height = "N/A";
+        }
         JsonObject jTeam = result.getAsJsonObject("team");
         JsonElement jeTeam = jTeam.get("full_name");
         String firstName = jFirstName.getAsString();
         String lastName = jLastName.getAsString();
         String position = jPosition.getAsString();
-        String heightFeet = jHeightFeet.getAsString();
-        String heightInches = jHeightInches.getAsString();
-        String height = heightFeet + " " + heightInches + "\"";
         if (position.equalsIgnoreCase("")) {
             position = "N/A";
         }
@@ -222,12 +226,6 @@ public class OmegaApp extends Application {
             errorBox.getChildren().add(errorMsg);
             root.getChildren().add(errorBox);
         }
-    }
-
-    public void getNextPlayer() {
-        HBox getNext = new HBox();
-        Button nextPlayer = new Button("Get next");
-        getNext.getChildren().add(nextPlayer);
     }
 
     /**
