@@ -128,6 +128,9 @@ public class OmegaApp extends Application {
             JsonElement je = JsonParser.parseReader(reader);
             JsonObject jRoot = je.getAsJsonObject();
             JsonArray results = jRoot.getAsJsonArray("data");
+            if (results.size() > 1) {
+                getNextPlayer();
+            }
             JsonObject result = results.get(0).getAsJsonObject();
             printStats(result);
         } catch (Exception e) {
@@ -151,11 +154,16 @@ public class OmegaApp extends Application {
         JsonElement jFirstName = result.get("first_name");
         JsonElement jLastName = result.get("last_name");
         JsonElement jPosition = result.get("position");
+        JsonElement jHeightFeet = result.get("height_feet");
+        JsonElement jHeightInches = result.get("height_inches");
         JsonObject jTeam = result.getAsJsonObject("team");
         JsonElement jeTeam = jTeam.get("full_name");
         String firstName = jFirstName.getAsString();
         String lastName = jLastName.getAsString();
         String position = jPosition.getAsString();
+        String heightFeet = jHeightFeet.getAsString();
+        String heightInches = jHeightInches.getAsString();
+        String height = heightFeet + " " + heightInches + "\"";
         if (position.equalsIgnoreCase("")) {
             position = "N/A";
         }
@@ -164,7 +172,8 @@ public class OmegaApp extends Application {
         Label labelLastName = new Label("Last Name: " + lastName);
         Label labelPosition = new Label("Position: " + position);
         Label labelTeam = new Label("Team: " + team);
-        stats.getChildren().addAll(labelFirstName, labelLastName, labelPosition, labelTeam);
+        Label labelHeight = new Label("Height: " + height);
+        stats.getChildren().addAll(labelFirstName, labelLastName, labelPosition, labelTeam, labelHeight);
         stats.setAlignment(Pos.CENTER);
         root.getChildren().add(stats);
         try {
@@ -213,6 +222,12 @@ public class OmegaApp extends Application {
             errorBox.getChildren().add(errorMsg);
             root.getChildren().add(errorBox);
         }
+    }
+
+    public void getNextPlayer() {
+        HBox getNext = new HBox();
+        Button nextPlayer = new Button("Get next");
+        getNext.getChildren().add(nextPlayer);
     }
 
     /**
