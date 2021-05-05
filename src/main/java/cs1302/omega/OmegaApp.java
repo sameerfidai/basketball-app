@@ -30,6 +30,7 @@ public class OmegaApp extends Application {
     TextField field;
     HBox searchBox;
     HBox displayImg;
+    HBox next;
     VBox stats;
     VBox errorBox;
     String playerName;
@@ -102,7 +103,7 @@ public class OmegaApp extends Application {
                 playerName = field.getText();
                 playerName.toLowerCase();
                 playerName = playerName.replaceAll("\\s", "+");
-                getStats(playerName);
+                getStats(playerName, 0);
             } catch (Exception e1) {
                 System.err.println(e);
             }
@@ -115,12 +116,15 @@ public class OmegaApp extends Application {
      * @throws IOException
      * @param content name of player
      */
-    public void getStats(String content) throws IOException {
+    public void getStats(String content, int i) throws IOException {
         if (stats != null) {
             stats.getChildren().clear();
         }
         if (errorBox != null) {
             errorBox.getChildren().clear();
+        }
+        if (next != null) {
+            next.getChildren().clear();
         }
         try {
             String sUrl = "https://www.balldontlie.io/api/v1/players?search=" + content;
@@ -129,7 +133,10 @@ public class OmegaApp extends Application {
             JsonElement je = JsonParser.parseReader(reader);
             JsonObject jRoot = je.getAsJsonObject();
             JsonArray results = jRoot.getAsJsonArray("data");
-            JsonObject result = results.get(0).getAsJsonObject();
+            if (results.size() > 1) {
+                getNextPlayer();
+            }
+            JsonObject result = results.get(i).getAsJsonObject();
             printStats(result);
         } catch (Exception e) {
             if (displayImg != null) {
@@ -226,6 +233,32 @@ public class OmegaApp extends Application {
             errorBox.getChildren().add(errorMsg);
             root.getChildren().add(errorBox);
         }
+    }
+
+    /**
+     * Gets next player with there is more than one player with the same name.
+     */
+    public void getNextPlayer() {
+        if (next != null) {
+            next.getChildren().clear();
+        }
+        next = new HBox(20);
+        Button button = new Button("Get next player");
+        Label label = new Label("There is another player with this name.");
+        next.getChildren().addAll(label, button);
+        next.setAlignment(Pos.CENTER);
+        button.setOnAction(e -> {
+            try {
+                playerName = field.getText();
+                playerName.toLowerCase();
+                playerName = playerName.replaceAll("\\s", "+");
+                getStats(playerName, 1);
+                root.getChildren().removeAll(next);
+            } catch (Exception e1) {
+                System.err.println(e);
+            }
+        });
+        root.getChildren().add(next);
     }
 
     /**
