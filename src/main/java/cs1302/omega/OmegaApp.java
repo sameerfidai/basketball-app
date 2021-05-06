@@ -87,7 +87,7 @@ public class OmegaApp extends Application {
         field = new TextField();
         field.setPromptText("e.g: Kyrie Irving");
         HBox.setMargin(field, new Insets(5, 1, 5, 10));
-        searchBox.getChildren().add(field);
+        searchBox.getChildren().addAll(field);
     }
 
     /**
@@ -95,8 +95,10 @@ public class OmegaApp extends Application {
      */
     public void loadSearchButton() {
         Button search = new Button("Search");
+        Label label = new Label("Type in an NBA player and click search");
+        HBox.setMargin(label, new Insets(10, 10, 5, 0));
         HBox.setMargin(search, new Insets(5, 10, 5, 0));
-        searchBox.getChildren().add(search);
+        searchBox.getChildren().addAll(search, label);
         root.getChildren().add(searchBox);
         search.setOnAction(e -> {
             try {
