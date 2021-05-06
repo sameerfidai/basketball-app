@@ -236,7 +236,7 @@ public class OmegaApp extends Application {
     }
 
     /**
-     * Gets next player with there is more than one player with the same name.
+     * Gets next player if there is more than one player with the same name.
      */
     public void getNextPlayer() {
         if (next != null) {

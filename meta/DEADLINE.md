@@ -7,22 +7,19 @@ Markdown is transformed into nice looking HTML.
 
 ## Part 1: App Description
 
-> Please provide a firendly description of your app, including the app
-> category that you chose, and the primary functions available to users
-> of the app.
+Chose the an External API tool that integrates two external RESTful JSON APIs based on user input.
+Depending on the input, the app displays statistics about an NBA player along with an image.
 
 TODO WRITE / REPLACE
 
 ## Part 2: New
 
-> What is something new and/or exciting that you learned from working
-> on this project?
+Working with API's really helped. I was struggling with JSON's before this project, but I think this
+project really helped with that part. It would be relatively easy to work with API's now.
 
 TODO WRITE / REPLACE
 
 ## Part 3: Retrospect
 
-> If you could start the project over from scratch, what do
-> you think might do differently and why?
-
-TODO WRITE / REPLACE
+Would definitely make the app better looking from a visual aspect and would also add more features instead of 
+just the NBA. Would add other leagues and sports like NFL, MLB, soccer, etc.
