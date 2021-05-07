@@ -114,9 +114,10 @@ public class OmegaApp extends Application {
 
     /**
      * Gets stats for NBA Player.
-     * 
+     *
      * @throws IOException
      * @param content name of player
+     * @param i index of JSON array(if more than one player, there are multiple indexes)
      */
     public void getStats(String content, int i) throws IOException {
         if (stats != null) {
@@ -154,7 +155,7 @@ public class OmegaApp extends Application {
 
     /**
      * Prints stats for Player.
-     * 
+     *
      * @param result JSON object
      */
     public void printStats(JsonObject result) {
@@ -186,8 +187,8 @@ public class OmegaApp extends Application {
         Label labelPosition = new Label("Position: " + position);
         Label labelTeam = new Label("Team: " + team);
         Label labelHeight = new Label("Height: " + height);
-        stats.getChildren().addAll(labelFirstName, labelLastName, labelPosition, labelTeam, 
-        labelHeight);
+        stats.getChildren().addAll(labelFirstName, labelLastName, labelPosition, labelTeam,
+            labelHeight);
         stats.setAlignment(Pos.CENTER);
         root.getChildren().add(stats);
         try {
@@ -199,7 +200,7 @@ public class OmegaApp extends Application {
 
     /**
      * Gets the player's image.
-     * 
+     *
      * @param firstName player's first name
      * @param lastName  player's last name
      * @throws IOException
@@ -266,7 +267,7 @@ public class OmegaApp extends Application {
 
     /**
      * Runs the App.
-     * 
+     *
      * @throws IOException
      */
     public void run() throws IOException {
