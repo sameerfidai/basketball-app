@@ -186,7 +186,8 @@ public class OmegaApp extends Application {
         Label labelPosition = new Label("Position: " + position);
         Label labelTeam = new Label("Team: " + team);
         Label labelHeight = new Label("Height: " + height);
-        stats.getChildren().addAll(labelFirstName, labelLastName, labelPosition, labelTeam, labelHeight);
+        stats.getChildren().addAll(labelFirstName, labelLastName, labelPosition, labelTeam, 
+        labelHeight);
         stats.setAlignment(Pos.CENTER);
         root.getChildren().add(stats);
         try {
