@@ -67,12 +67,9 @@ public class OmegaApp extends Application {
         MenuBar menuBar = new MenuBar();
         menuBar.setMinWidth(600);
         Menu file = new Menu("File");
-        Menu help = new Menu("Help");
-        menuBar.getMenus().addAll(file, help);
+        menuBar.getMenus().add(file);
         MenuItem exit = new MenuItem("Exit");
         file.getItems().add(exit);
-        MenuItem about = new MenuItem("About");
-        help.getItems().add(about);
         exit.setOnAction(event -> Platform.exit());
         hbox.getChildren().add(menuBar);
         HBox.setHgrow(menuBar, Priority.ALWAYS);
