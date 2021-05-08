@@ -17,6 +17,9 @@ TODO WRITE / REPLACE
 Working with API's really helped. I was struggling with JSON's before this project, but I think this
 project really helped with that part. It would be relatively easy to work with API's now.
 
+API 1: https://www.balldontlie.io/#introduction (for stats)
+API 2: https://www.thesportsdb.com/api.php (for images)
+
 TODO WRITE / REPLACE
 
 ## Part 3: Retrospect
