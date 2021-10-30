@@ -1,1 +1,3 @@
-Final App Project for cs1302-UGA. An app that shows statistics about an NBA player.
+An app that shows info about an NBA player.
+
+Made with JavaFx, balldontlie API, and TheSportsDB API. 
