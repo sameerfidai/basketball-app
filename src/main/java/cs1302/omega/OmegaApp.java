@@ -50,7 +50,7 @@ public class OmegaApp extends Application {
         }
 
         // setup stage
-        stage.setTitle("OmegaApp!");
+        stage.setTitle("Basketball App");
         stage.setScene(scene);
         stage.setMinHeight(600);
         stage.setMinWidth(600);
@@ -114,7 +114,8 @@ public class OmegaApp extends Application {
      *
      * @throws IOException
      * @param content name of player
-     * @param i index of JSON array(if more than one player, there are multiple indexes)
+     * @param i       index of JSON array(if more than one player, there are
+     *                multiple indexes)
      */
     public void getStats(String content, int i) throws IOException {
         if (stats != null) {
@@ -184,8 +185,7 @@ public class OmegaApp extends Application {
         Label labelPosition = new Label("Position: " + position);
         Label labelTeam = new Label("Team: " + team);
         Label labelHeight = new Label("Height: " + height);
-        stats.getChildren().addAll(labelFirstName, labelLastName, labelPosition, labelTeam,
-            labelHeight);
+        stats.getChildren().addAll(labelFirstName, labelLastName, labelPosition, labelTeam, labelHeight);
         stats.setAlignment(Pos.CENTER);
         root.getChildren().add(stats);
         try {
